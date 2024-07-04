@@ -22,7 +22,7 @@ Clone o repositório e inicie o bot:
 git clone https://github.com/joaqmiu/giulia-bot bot && cd bot && npm i && npm start
 ```
 
-Escaneie o QR Code.
+Escolha a opção.
 
 ## Comandos
 
