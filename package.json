@@ -1,0 +1,37 @@
+{
+  "name": "Giulia",
+  "version": "1.2.0",
+  "description": "Um bot simples de WhatsApp usando Baileys.",
+  "main": "aut/1.js",
+  "scripts": {
+    "start": "bash bot.sh"
+  },
+  "author": "joaqmiu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joaqmiu/giulia-bot.git"
+  },
+  "keywords": [
+    "WhatsApp",
+    "Bot",
+    "Baileys",
+    "Bot whatsapp",
+    "whatsapp",
+    "ia",
+    "ai",
+    "Automation",
+    "ffmpeg",
+    "figurinhas"
+  ],
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.5",
+    "debug": "^4.3.5",
+    "fluent-ffmpeg": "^2.1.3",
+    "hercai": "^12.2.0",
+    "pino": "^9.2.0",
+    "qrcode-terminal": "^0.12.0",
+    "readline-sync": "^1.4.10",
+    "yt-search": "^2.11.0",
+    "ytdl-core": "^4.11.5"
+  }
+}
