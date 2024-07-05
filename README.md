@@ -27,17 +27,15 @@ git clone https://github.com/joaqmiu/giulia-bot bot && cd bot && npm i && npm st
 O número de telefone deve ser inserido no formato internacional incluindo o DDI ( +55, +1, etc )
 
 Exemplos:
-- +557481033040
--  557481033040
+- +55 74 99999-9999
+-  5574999999999
+
+Em caso de dúvidas, entre em contato comigo pelo [WhatsApp](https://wa.me/557481033040)
 
 ## Comandos
 
 Envie <strong>!menu</strong> para o bot para obter acesso a todos os comandos.
 
 <div align="center">
-    <img src="https://img96.pixhost.to/images/784/483754713_5742.jpg" width="300">
+    <img src="https://img96.pixhost.to/images/867/485490833_4235.jpg" width="300">
 </div>
-
-## Meus contatos:
-
-[WhatsApp](https://wa.me/557481033040)
