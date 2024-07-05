@@ -4,7 +4,8 @@
   "description": "Um bot simples de WhatsApp usando Baileys.",
   "main": "aut/1.js",
   "scripts": {
-    "start": "bash bot.sh"
+    "start": "bash bot.sh",
+    "test": "bash render.sh"
   },
   "author": "joaqmiu",
   "repository": {
