@@ -22,7 +22,13 @@ Clone o repositório e inicie o bot:
 git clone https://github.com/joaqmiu/giulia-bot bot && cd bot && npm i && npm start
 ```
 
-Escolha a opção.
+## Importante
+
+O número de telefone deve ser inserido no formato internacional incluindo o DDI ( +55, +1, etc )
+
+Exemplos:
+- +557481033040
+-  557481033040
 
 ## Comandos
 
