@@ -25,7 +25,7 @@ else
     case $option in
         1)
             echo -e "\e[34mIniciando conexão com QR-Code...\e[0m"
-            node ./aut.1.js
+            node ./aut/1.js
             ;;
         2)
             echo -e "\e[34mIniciando conexão com código...\e[0m"
