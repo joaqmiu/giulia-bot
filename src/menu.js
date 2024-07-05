@@ -4,7 +4,7 @@ const { botName, prefix, dev, nDev, botFoto } = require('./info');
 const showMenu = async (sock, from, quotedMsg) => {
     const menuText = `
 ┌──────────────────────────
-| - Prefixo: *${prefix}*
+| - *Prefixo: ${prefix}*
 | - *Dev: ${dev}*
 | - *Número do dev:* ${nDev}
 |
