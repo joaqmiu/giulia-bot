@@ -16,23 +16,39 @@ if [ "$(ls -A sessao)" ]; then
     echo -e "\e[32mSessão encontrada! Conectando...\e[0m"
     node ./aut/1.js
 else
-    echo -e "\e[31mSem sessão ativa, escolha uma opção:\e[0m"
-    echo -e "\e[34m[ 1 ] QR-Code"
-    echo -e "[ 2 ] Código de pareamento\e[0m"
+    while true; do
+        echo -e "\e[31mSem sessão ativa, escolha uma opção:\e[0m"
+        echo -e "\e[34m[ 0 ] Fechar o script"
+        echo -e "[ 1 ] QR-Code"
+        echo -e "[ 2 ] Código de pareamento"
+        echo -e "[ 4 ] Apagar sessão atual\e[0m"
 
-    read -p "Escolha uma opção: " option
+        read -p "Escolha uma opção: " option
 
-    case $option in
-        1)
-            echo -e "\e[34mIniciando conexão com QR-Code...\e[0m"
-            node ./aut/1.js
-            ;;
-        2)
-            echo -e "\e[34mIniciando conexão com código...\e[0m"
-            node ./aut/2.js
-            ;;
-        *)
-            echo -e "\e[31mOpção inválida.\e[0m"
-            ;;
-    esac
+        case $option in
+            0)
+                echo -e "\e[34mFechando o script...\e[0m"
+                exit 0
+                ;;
+            1)
+                echo -e "\e[34mIniciando conexão com QR-Code...\e[0m"
+                node ./aut/1.js
+                break
+                ;;
+            2)
+                echo -e "\e[34mIniciando conexão com código...\e[0m"
+                node ./aut/2.js
+                break
+                ;;
+            4)
+                echo -e "\e[34mSessão atual apagada!\e[0m"
+                rm -r sessao
+                mkdir sessao
+                ;;
+            *)
+                echo -e "\e[31mEscolha uma opção válida!\e[0m"
+                ;;
+        esac
+    done
 fi
+
