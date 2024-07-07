@@ -21,7 +21,7 @@ else
         echo -e "\e[34m[ 0 ] Fechar o script"
         echo -e "[ 1 ] QR-Code"
         echo -e "[ 2 ] Código de pareamento"
-        echo -e "[ 4 ] Apagar sessão atual\e[0m"
+        echo -e "[ 3 ] Apagar sessão atual\e[0m"
 
         read -p "Escolha uma opção: " option
 
@@ -40,7 +40,7 @@ else
                 node ./aut/2.js
                 break
                 ;;
-            4)
+            3)
                 echo -e "\e[34mSessão atual apagada!\e[0m"
                 rm -r sessao
                 mkdir sessao
