@@ -8,6 +8,7 @@ const {
   delay
 } = require("@whiskeysockets/baileys");
 const Pino = require("pino");
+const { makeInMemoryStore } = require('@whiskeysockets/baileys/lib/Store');
 const qrcode = require("qrcode-terminal");
 const { handleMessage } = require('../msgs');
 
@@ -30,6 +31,7 @@ const onlyNumbers = (str) => {
 const startBot = async () => {
   const { state, saveCreds } = await useMultiFileAuthState('sessao');
   const { version } = await fetchLatestBaileysVersion();
+  const store = makeInMemoryStore({ logger: Pino().child({ level: 'silent', stream: 'store' }) });
 
   const sock = makeWASocket({
     auth: state,
@@ -38,7 +40,10 @@ const startBot = async () => {
     browser: ["Ubuntu", "Chrome", "20.0.04"],
     printQRInTerminal: false,
     markOnlineOnConnect: true,
+    store
   });
+
+  store.bind(sock.ev);
 
   if (!sock.authState.creds.registered) {
     const phoneNumber = await question("Informe o seu número de telefone: ");
@@ -84,7 +89,7 @@ const startBot = async () => {
     } else if (connection === 'open') {
       console.log('Conectado!');
 
-      const chats = await sock.store.chats.all();
+      const chats = await store.chats.all();
       for (const chat of chats) {
         await sock.readMessages([{
           remoteJid: chat.id,
