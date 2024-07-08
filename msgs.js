@@ -61,9 +61,9 @@ const handleMessage = async (sock, msg) => {
 
         let welcomeMessage;
         if (isGroup) {
-            welcomeMessage = `Saudações, *${groupName}*! Eu me chamo *${botName}*, e posso fazer várias coisas desde baixar música a gerar imagens. Fale com meu dono em caso de dúvida ou mau funcionamento.`;
+            welcomeMessage = `Saudações, *${groupName}*! Eu me chamo *${botName}*, e posso fazer várias coisas desde baixar música a gerar imagens. Fale com meu dev em caso de dúvida ou mau funcionamento.`;
         } else {
-            welcomeMessage = `Bem-vindo, *${pushName}!* Eu me chamo *${botName}*, e posso fazer várias coisas desde baixar música a gerar imagens. Fale com meu dono em caso de dúvida ou mau funcionamento.`;
+            welcomeMessage = `Bem-vindo, *${pushName}!* Eu me chamo *${botName}*, e posso fazer várias coisas desde baixar música a gerar imagens. Fale com meu dev em caso de dúvida ou mau funcionamento.`;
         }
 
         await sock.sendMessage(from, { text: welcomeMessage });
