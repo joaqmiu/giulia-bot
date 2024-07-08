@@ -1,14 +1,19 @@
 const { default: makeWASocket, useMultiFileAuthState, delay } = require('@whiskeysockets/baileys');
 const Pino = require('pino');
+const { makeInMemoryStore } = require('@whiskeysockets/baileys/lib/Store');
 const { handleMessage } = require('../msgs');
 
 const startBot = async () => {
     const { state, saveCreds } = await useMultiFileAuthState('sessao');
+    const store = makeInMemoryStore({ logger: Pino().child({ level: 'silent', stream: 'store' }) });
 
     const sock = makeWASocket({
         auth: state,
-        logger: Pino({ level: 'silent' })
+        logger: Pino({ level: 'silent' }),
+        store
     });
+
+    store.bind(sock.ev);
 
     sock.ev.on('creds.update', saveCreds);
 
@@ -40,7 +45,7 @@ const startBot = async () => {
         } else if (connection === 'open') {
             console.log('Conectado!');
 
-            const chats = await sock.store.chats.all();
+            const chats = await store.chats.all();
             for (const chat of chats) {
                 await sock.readMessages([{
                     remoteJid: chat.id,
