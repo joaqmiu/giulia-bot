@@ -1,16 +1,43 @@
+const fs = require('fs');
 const { botName, prefix } = require('./src/info');
-const { downloadVideo, downloadAudio } = require('./src/ytdl');
-const { handleGemini, handleGPT, handleImage } = require('./src/ia');
 const { showMenu } = require('./src/menu');
-const { handleSticker } = require('./src/stk');
 const { saveUser, sendMessageToAll } = require('./src/util');
-const { downloadAudio: downloadPlayAudio } = require('./src/play');
-const { shortenUrl } = require('./src/link');
-const { banUser, addUser, promoteUser, demoteUser } = require('./src/adm');
+const { handleCommand } = require('./src/comandos');
+
+const userFile = './src/user.json';
+
+const loadUsers = () => {
+    try {
+        if (fs.existsSync(userFile)) {
+            const data = fs.readFileSync(userFile);
+            return JSON.parse(data);
+        }
+    } catch (error) {
+        console.error("Erro ao carregar user.json:", error);
+    }
+    return [];
+};
+
+const saveUserFile = (users) => {
+    try {
+        fs.writeFileSync(userFile, JSON.stringify(users, null, 2));
+    } catch (error) {
+        console.error("Erro ao salvar user.json:", error);
+    }
+};
+
+let users = loadUsers();
 
 const handleMessage = async (sock, msg) => {
     const from = msg.key.remoteJid;
     const pushName = msg.pushName || 'Usuário';
+    const isGroup = from.endsWith('@g.us');
+    let groupName = '';
+
+    if (isGroup) {
+        const metadata = await sock.groupMetadata(from);
+        groupName = metadata.subject;
+    }
 
     let body = '';
 
@@ -26,7 +53,30 @@ const handleMessage = async (sock, msg) => {
         }
     }
 
-    saveUser({ id: from });
+    const isNewUser = !users.some(user => user.id === from);
+
+    if (isNewUser) {
+        users.push({ id: from });
+        saveUserFile(users);
+
+        let welcomeMessage;
+        if (isGroup) {
+            welcomeMessage = `Saudações, ${groupName}! Eu me chamo ${botName}, e posso fazer várias coisas desde baixar música a gerar imagens. Fale com meu dono em caso de dúvida ou mau funcionamento.`;
+        } else {
+            welcomeMessage = `Bem-vindo, ${pushName}! Eu me chamo ${botName}, e posso fazer várias coisas desde baixar música a gerar imagens. Fale com meu dono em caso de dúvida ou mau funcionamento.`;
+        }
+
+        await sock.sendMessage(from, { text: welcomeMessage });
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await showMenu(sock, from, msg);
+
+        const vcard = 'BEGIN:VCARD\n' +
+                      'VERSION:3.0\n' +
+                      'FN:Joaquim\n' +
+                      'TEL;type=CELL;type=VOICE;waid=557481033040:+55 74 8103-3040\n' +
+                      'END:VCARD';
+        await sock.sendMessage(from, { contacts: { displayName: 'Joaquim', contacts: [{ vcard }] } });
+    }
 
     if (!body.startsWith(prefix)) {
         return;
@@ -55,66 +105,7 @@ const handleMessage = async (sock, msg) => {
 
     try {
         await startTyping();
-
-        switch (command) {
-            case 'vid':
-                await downloadVideo(sock, from, argument, msg);
-                break;
-            case 'aud':
-                await downloadAudio(sock, from, argument, msg);
-                break;
-            case 'gem':
-                await handleGemini(sock, from, argument, pushName);
-                break;
-            case 'gpt':
-                await handleGPT(sock, from, argument, pushName);
-                break;
-            case 'img':
-                await handleImage(sock, from, argument);
-                break;
-            case 'menu':
-                await showMenu(sock, from, msg);
-                break;
-            case 's':
-            case 'sticker':
-            case 'fig':
-                if (msg.message.extendedTextMessage) {
-                    const quotedMsg = msg.message.extendedTextMessage.contextInfo.quotedMessage;
-                    if (quotedMsg) {
-                        await handleSticker(sock, { ...msg, message: quotedMsg }, msg);
-                    } else {
-                        await sendMessage({ text: '*Você precisa marcar ou responder a uma imagem ou vídeo.*' });
-                    }
-                } else {
-                    await handleSticker(sock, msg, msg);
-                }
-                break;
-            case 'play':
-                await downloadPlayAudio(sock, from, argument, msg);
-                break;
-            case 'tm':
-                await sendMessageToAll(sock, argument, msg);
-                break;
-            case 'encurta':
-            case 'short':
-                const shortUrl = await shortenUrl(argument);
-                await sendMessage({ text: `*Seu link encurtado:*\n\n ${shortUrl}` });
-                break;
-            case 'ban':
-                await banUser(sock, msg);
-                break;
-            case 'add':
-                await addUser(sock, from, argument, msg);
-                break;
-            case 'adm':
-                await promoteUser(sock, msg);
-                break;
-            case 'reb':
-                await demoteUser(sock, msg);
-                break;
-            default:
-                await sendMessage({ text: `*${botName}:\n Comando não reconhecido. Use ${prefix}menu para ver o menu.*` });
-        }
+        await handleCommand(command, argument, sock, from, msg, pushName);
     } finally {
         await stopTyping();
     }
