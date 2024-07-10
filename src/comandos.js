@@ -5,6 +5,7 @@ const { handleSticker } = require('./stk');
 const { downloadAudio: downloadPlayAudio } = require('./play');
 const { shortenUrl } = require('./link');
 const { banUser, addUser, promoteUser, demoteUser } = require('./adm');
+const { generateTemporaryEmail } = require('./mail');
 
 const handleCommand = async (command, argument, sock, from, msg, pushName) => {
     switch (command) {
@@ -62,6 +63,9 @@ const handleCommand = async (command, argument, sock, from, msg, pushName) => {
             break;
         case 'reb':
             await demoteUser(sock, msg);
+            break;
+        case 'mail': // Novo comando
+            await generateTemporaryEmail(sock, from, msg);
             break;
         default:
             await sock.sendMessage(from, { text: `*Comando não reconhecido. Use o prefixo correto para ver o menu.*` });
