@@ -1,12 +1,13 @@
 const debug = require('debug')('bot:menu');
-const { botName, prefix, dev, nDev, botFoto } = require('./info');
+const { botName, prefix, dev, nDev, botFoto, admin } = require('./info');
 
 const showMenu = async (sock, from, quotedMsg) => {
     const menuText = `
 ┌──────────────────────────
 | - *Prefixo: ${prefix}*
 | - *Dev: ${dev}*
-| - *Número do dev:* ${nDev}
+| - *Número do dev: ${nDev}*
+| - *Admin: ${admin}*
 |
 | - *Comandos gerais:*
 |
