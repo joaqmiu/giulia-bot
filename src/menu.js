@@ -6,7 +6,6 @@ const showMenu = async (sock, from, quotedMsg) => {
 ┌──────────────────────────
 | - *Prefixo: ${prefix}*
 | - *Dev: ${dev}*
-| - *Número do dev: ${nDev}*
 |
 | - *Comandos gerais:*
 |
